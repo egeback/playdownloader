@@ -1,2 +1,2 @@
-# stream_media_api
-Api listing stream media
+# Play downloader
+Microservices to download play media
