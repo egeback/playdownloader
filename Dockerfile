@@ -6,8 +6,9 @@ FROM golang:latest
 # Add Maintainer Info
 LABEL maintainer="Marky Egebäck <marky@egeback.se>"
 
-RUN apt-get update && apt-get install -y python3 python3-pip
-RUN apt-get install -y svtplay-dl
+RUN curl -s https://svtplay-dl.se/release-key.txt | apt-key add -
+RUN echo "deb https://apt.svtplay-dl.se/ svtplay-dl release" | tee /etc/apt/sources.list.d/svtplay-dl.list
+RUN apt-get update && apt-get install -y python3 python3-pip svtplay-dl
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -29,4 +30,4 @@ COPY . .
 EXPOSE 8081
 
 # Command to run the executable
-CMD ["./main"]
+CMD ["./mediadownloader"]
