@@ -11,10 +11,10 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/egeback/mediadownloader/internal/controllers"
-	_ "github.com/egeback/mediadownloader/internal/docs"
-	"github.com/egeback/mediadownloader/internal/models"
-	"github.com/egeback/mediadownloader/internal/version"
+	"github.com/egeback/playdownloader/internal/controllers"
+	_ "github.com/egeback/playdownloader/internal/docs"
+	"github.com/egeback/playdownloader/internal/models"
+	"github.com/egeback/playdownloader/internal/version"
 	"github.com/gin-gonic/gin"
 	jsonp "github.com/tomwei7/gin-jsonp"
 

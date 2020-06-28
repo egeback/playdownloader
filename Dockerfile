@@ -10,6 +10,8 @@ RUN curl -s https://svtplay-dl.se/release-key.txt | apt-key add -
 RUN echo "deb https://apt.svtplay-dl.se/ svtplay-dl release" | tee /etc/apt/sources.list.d/svtplay-dl.list
 RUN apt-get update && apt-get install -y python3 python3-pip svtplay-dl
 
+RUN go get -u github.com/swaggo/swag/cmd/swag
+
 # Set the Current Working Directory inside the container
 WORKDIR /app
 

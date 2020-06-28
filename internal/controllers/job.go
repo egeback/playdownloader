@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/egeback/mediadownloader/internal/models"
+	"github.com/egeback/playdownloader/internal/models"
 	"github.com/gin-gonic/gin"
 )
 
