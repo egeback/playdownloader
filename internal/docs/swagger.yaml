@@ -12,10 +12,44 @@ definitions:
         example: http://
         type: string
     type: object
+  models.Download:
+    properties:
+      audio_eta:
+        type: string
+      audio_ready:
+        type: boolean
+      completed:
+        type: string
+      done:
+        type: boolean
+      error:
+        type: boolean
+      filename:
+        type: string
+      running:
+        type: boolean
+      started:
+        type: string
+      std_err:
+        items:
+          type: string
+        type: array
+      std_out:
+        items:
+          type: string
+        type: array
+      url:
+        type: string
+      video_eta:
+        type: string
+      video_ready:
+        type: boolean
+    type: object
   models.Job:
     properties:
       download:
-        type: Download
+        $ref: '#/definitions/models.Download'
+        type: object
       uuid:
         type: string
     type: object

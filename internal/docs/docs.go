@@ -221,11 +221,62 @@ var doc = `{
                 }
             }
         },
+        "models.Download": {
+            "type": "object",
+            "properties": {
+                "audio_eta": {
+                    "type": "string"
+                },
+                "audio_ready": {
+                    "type": "boolean"
+                },
+                "completed": {
+                    "type": "string"
+                },
+                "done": {
+                    "type": "boolean"
+                },
+                "error": {
+                    "type": "boolean"
+                },
+                "filename": {
+                    "type": "string"
+                },
+                "running": {
+                    "type": "boolean"
+                },
+                "started": {
+                    "type": "string"
+                },
+                "std_err": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "std_out": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "url": {
+                    "type": "string"
+                },
+                "video_eta": {
+                    "type": "string"
+                },
+                "video_ready": {
+                    "type": "boolean"
+                }
+            }
+        },
         "models.Job": {
             "type": "object",
             "properties": {
                 "download": {
-                    "type": "Download"
+                    "type": "object",
+                    "$ref": "#/definitions/models.Download"
                 },
                 "uuid": {
                     "type": "string"

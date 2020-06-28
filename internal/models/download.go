@@ -8,6 +8,28 @@ import (
 	"github.com/go-cmd/cmd"
 )
 
+//Download struct containing info regarding a executable command
+type Download struct {
+	URL             string       `json:"url"`
+	Started         *time.Time   `json:"started"`
+	Completed       *time.Time   `json:"completed"`
+	Running         bool         `json:"running"`
+	Done            bool         `json:"done"`
+	FindCmd         *cmd.Cmd     `json:"-" swaggerignore:"true"`
+	Ticker          *time.Ticker `json:"-" swaggerignore:"true"`
+	StdOut          []string     `json:"std_out"`
+	StdErr          []string     `json:"std_err"`
+	Error           bool         `json:"error"`
+	Filename        *string      `json:"filename"`
+	AudioETA        *string      `json:"audio_eta"`
+	VideoETA        *string      `json:"video_eta"`
+	AudioDownloaded bool         `json:"audio_ready"`
+	VideoDownloaded bool         `json:"video_ready"`
+	AudioStarted    bool         `json:"-" swaggerignore:"true"`
+	VideoStarted    bool         `json:"-" swaggerignore:"true"`
+	FullStdErr      []string     `json:"-" swaggerignore:"true"`
+}
+
 var ticker *time.Ticker = time.NewTicker(1 * time.Second)
 
 //SvtDLLocation is describing the location of SvtDL
@@ -15,29 +37,6 @@ var SvtDLLocation = "/usr/bin/svtplay-dl"
 
 //DefaultDownloadDir specifies default location for downloadedfiles
 var DefaultDownloadDir = "/media"
-
-//Download struct containing info regarding a executable command
-type Download struct {
-	URL             string            `json:"url"`
-	Started         *time.Time        `json:"started"`
-	Completed       *time.Time        `json:"completed"`
-	Running         bool              `json:"running"`
-	Done            bool              `json:"done"`
-	FindCmd         *cmd.Cmd          `json:"-"`
-	StatusChan      <-chan cmd.Status `json:"-"`
-	Ticker          *time.Ticker      `json:"-"`
-	StdOut          []string          `json:"std_out"`
-	StdErr          []string          `json:"std_err"`
-	Error           bool              `json:"error"`
-	Filename        *string           `json:"filename"`
-	AudioETA        *string           `json:"audio_eta"`
-	VideoETA        *string           `json:"video_eta"`
-	AudioDownloaded bool              `json:"audio_ready"`
-	VideoDownloaded bool              `json:"video_ready"`
-	AudioStarted    bool              `json:"-"`
-	VideoStarted    bool              `json:"-"`
-	FullStdErr      []string          `json:"-"`
-}
 
 func extractETA(str string) *string {
 	i := strings.LastIndex(str, "ETA: ")
@@ -102,7 +101,7 @@ func Max(x int, y int) int {
 // Start to start download
 func (d *Download) Start() {
 	d.FindCmd = cmd.NewCmd(SvtDLLocation, d.URL, "--force", "--output", DefaultDownloadDir)
-	d.StatusChan = d.FindCmd.Start() // non-blocking
+	statusChan := d.FindCmd.Start() // non-blocking
 	d.Running = true
 	started := time.Now()
 	d.Started = &started
@@ -155,7 +154,7 @@ func (d *Download) Start() {
 
 	// Check if command is done
 	select {
-	case <-d.StatusChan:
+	case <-statusChan:
 		t := time.Now()
 		d.Completed = &t
 		d.Done = true
@@ -164,7 +163,7 @@ func (d *Download) Start() {
 		// no, still running
 		go func() {
 			// Block waiting for command to exit, be stopped, or be killed
-			<-d.StatusChan
+			<-statusChan
 			d.Done = true
 			d.Running = false
 			t := time.Now()

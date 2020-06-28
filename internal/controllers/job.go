@@ -33,12 +33,10 @@ func (c *Controller) AddJob(ctx *gin.Context) {
 	}
 
 	download := models.AddDownload(u)
-	//download := actions.AddDownload("https://www.svtplay.se/video/21868842/palmegruppen-tar-langlunch")
-	//download := actions.AddDownload("https://www.svtplay.se/video/26987573/you-were-never-really-here")
-	//download.Start()
+
 	id := uuid.New()
 	uuid := id.String()
-	//models.AddJob(models.Job{UUID: uuid, Download: &download})
+
 	scheduler.AddJob(models.Job{UUID: uuid, Download: &download})
 
 	ctx.JSON(http.StatusAccepted, gin.H{
@@ -79,7 +77,6 @@ func (c *Controller) GetJob(ctx *gin.Context) {
 
 	_, exists := models.AllJobs()[uuid]
 	if !exists {
-		//ctx.JSON(http.StatusNotFound, gin.H{})
 		c.createErrorResponse(ctx, http.StatusNotFound, 101, "job id does not exist")
 		return
 	}
