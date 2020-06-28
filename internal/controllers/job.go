@@ -6,13 +6,23 @@ import (
 
 	"github.com/google/uuid"
 
-	"github.com/egeback/mediadownloader/pkg/models"
+	"github.com/egeback/mediadownloader/internal/models"
 	"github.com/gin-gonic/gin"
 )
 
 var scheduler = models.NewScheduler()
 
-// AddJob ...
+// AddJob function to add jobs to the API
+// @Summary Add job
+// @Description Add job to API for download
+// @Tags jobs
+// @Accept json
+// @Produce json
+// @Param url query string true "url to download" Format(str)
+// @Success 200 {object} models.Job
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /jobs [post]
 func (c *Controller) AddJob(ctx *gin.Context) {
 	u := ctx.DefaultQuery("url", "")
 	_, err := url.ParseRequestURI(u)
@@ -38,15 +48,32 @@ func (c *Controller) AddJob(ctx *gin.Context) {
 }
 
 //Jobs ...
+// Jobs function to list all jobs active in the API
+// @Summary List jobs
+// @Description List all jobs active in the API
+// @Tags jobs
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Job
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /jobs [get]
 func (c *Controller) Jobs(ctx *gin.Context) {
-	//retVal := make([]models.Job, 0, len(models.AllJobs()))
-	//for _, job := range models.AllJobs() {
-	//	retVal = append(retVal, job)
-	//}
 	ctx.JSON(http.StatusOK, scheduler.GetJobs())
 }
 
 //GetJob ...
+// Jobs function to get a specific job by UUID
+// @Summary List jobs
+// @Description Get a specific job by UUID
+// @Tags jobs
+// @Accept json
+// @Produce json
+// @Param uuid path string true "job uuid" Format(str)
+// @Success 200 {array} models.Job
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /jobs/:uuid [get]
 func (c *Controller) GetJob(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
