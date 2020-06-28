@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-  download_media_api:
+  playdownloader:
     build: .
-    container_name: download_media_api
+    container_name: playdownloader
     environment:
      - GIN_MODE=release
     ports:
