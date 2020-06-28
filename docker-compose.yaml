@@ -2,7 +2,10 @@ version: '2'
 
 services:
   playdownloader:
+    volumes:
+      - /mnt/media_download:/media
     build: .
+    image: egeback_playdownloader
     container_name: playdownloader
     environment:
      - GIN_MODE=release
