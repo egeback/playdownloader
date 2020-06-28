@@ -1,0 +1,19 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API to download with svt-download",
+        "title": "Play Media API - Downloader",
+        "contact": {
+            "name": "API Support",
+            "url": "http://xxxx.xxx.xx",
+            "email": "support@egeback.se"
+        },
+        "license": {
+            "name": "MIT License",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api/v1/",
+    "paths": {}
+}

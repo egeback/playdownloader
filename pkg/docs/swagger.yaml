@@ -1,0 +1,14 @@
+basePath: /api/v1/
+info:
+  contact:
+    email: support@egeback.se
+    name: API Support
+    url: http://xxxx.xxx.xx
+  description: API to download with svt-download
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  title: Play Media API - Downloader
+  version: "1.0"
+paths: {}
+swagger: "2.0"
