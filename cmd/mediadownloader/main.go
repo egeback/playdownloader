@@ -11,11 +11,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/egeback/mediadownloader/internal/version"
+	"github.com/egeback/mediadownloader/pkg/controllers"
+	"github.com/egeback/mediadownloader/pkg/models"
 	"github.com/gin-gonic/gin"
 	jsonp "github.com/tomwei7/gin-jsonp"
-	"gitlab.com/egeback/mediadownloader/internal/version"
-	"gitlab.com/egeback/mediadownloader/pkg/controllers"
-	"gitlab.com/egeback/mediadownloader/pkg/models"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

@@ -1,6 +1,6 @@
-package mediadownloader
+package playdownloader
 
 //Config ...
 func Config() string {
-	return "mediadownloader config"
+	return "playdownloader config"
 }
