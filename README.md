@@ -53,6 +53,9 @@ docker-compose up -d --no-deps --build
 
 This will run swag, build golang code and deploy container
 
+## Using API
+
+Swagger documenation available at http://localhost:8082/api/swagger/index.html
 
 ## TODO
 
@@ -61,5 +64,5 @@ This will run swag, build golang code and deploy container
 * [ ] Should svtplay-dl be removed or move to python for wrapper to reduce size?
 * [ ] Test cases
 * [x] Update README.md with documentation
-* [] Update code documentation
+* [x] Update code documentation
 * [x] Add delete to /jobs to stop job (delete with normal clean up)
