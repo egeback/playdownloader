@@ -17,6 +17,7 @@ require (
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7
+	github.com/tkanos/gonfig v0.0.0-20181112185242-896f3d81fadf
 	github.com/tomwei7/gin-jsonp v0.0.0-20191103091125-e5236eb5393d
 	github.com/urfave/cli/v2 v2.2.0 // indirect
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect

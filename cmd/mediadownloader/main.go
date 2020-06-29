@@ -14,7 +14,6 @@ import (
 	"github.com/egeback/playdownloader/internal/controllers"
 	_ "github.com/egeback/playdownloader/internal/docs"
 	"github.com/egeback/playdownloader/internal/models"
-	"github.com/egeback/playdownloader/internal/utils"
 	"github.com/egeback/playdownloader/internal/version"
 	"github.com/gin-gonic/gin"
 	jsonp "github.com/tomwei7/gin-jsonp"
@@ -51,12 +50,9 @@ func main() {
 		models.DefaultDownloadDir = defaultDownloadDir
 	}
 
+	//Set viper config
 	viper.SetDefault("users", map[string]string{"user1": "download"})
 	viper.SetDefault("basic_auth", false)
-
-	viper.SetEnvPrefix("DOWNLOADER")
-	viper.BindEnv("users", "USERS")
-	viper.BindEnv("basic_auth", "BASIC_AUTH")
 
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -70,13 +66,12 @@ func main() {
 			log.Panic(fmt.Errorf("Fatal error config file: %s", err))
 		}
 	}
+	viper.SetEnvPrefix("DOWNLOADER")
+	viper.BindEnv("users", "USERS")
+	viper.BindEnv("basicAuth", "BASIC_AUTH")
+	viper.AutomaticEnv()
 
-	useBasicAuth := false
-	if os.Getenv("DOWNLOADER_BASIC_AUTH") != "" {
-		useBasicAuth = *utils.GetBoolValueFromString(os.Getenv("DOWNLOADER_BASIC_AUTH"), false)
-	} else {
-		useBasicAuth = viper.GetBool("basic_auth")
-	}
+	useBasicAuth := viper.GetBool("basic_auth")
 	users := viper.GetStringMapString("users")
 
 	r := gin.New()

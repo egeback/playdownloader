@@ -1,4 +1,4 @@
 {   
-    "basic_auth": true,
+    "basicAuth": true,
     "users": { "user1": "downloader" }
 }
