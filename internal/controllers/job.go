@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//Scheduler global object
 var scheduler = models.NewScheduler()
 
 // AddJob function to add jobs to the API
@@ -32,7 +33,7 @@ func (c *Controller) AddJob(ctx *gin.Context) {
 		return
 	}
 
-	download := models.AddDownload(u)
+	download := models.CreateDownload(u)
 
 	id := uuid.New()
 	uuid := id.String()
@@ -60,27 +61,58 @@ func (c *Controller) Jobs(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, scheduler.GetJobs())
 }
 
-//GetJob ...
+//GetJob function to get a specific job by UUID
 // Jobs function to get a specific job by UUID
-// @Summary List jobs
+// @Summary Get job
 // @Description Get a specific job by UUID
 // @Tags jobs
 // @Accept json
 // @Produce json
 // @Param uuid path string true "job uuid" Format(str)
-// @Success 200 {array} models.Job
+// @Success 200 {object} models.Job
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
 // @Router /jobs/:uuid [get]
 func (c *Controller) GetJob(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
-	_, exists := models.AllJobs()[uuid]
-	if !exists {
+	job := scheduler.GetJobByUUID(uuid)
+	if job == nil {
 		c.createErrorResponse(ctx, http.StatusNotFound, 101, "job id does not exist")
 		return
 	}
 
-	ctx.JSON(http.StatusAccepted, models.AllJobs()[uuid])
+	ctx.JSON(http.StatusAccepted, job)
+	return
+}
+
+//StopJob ...
+// Jobs function to stop a specific job by UUID
+// @Summary Stop jobs
+// @Description Stop a specific job by UUID
+// @Tags jobs
+// @Accept json
+// @Produce json
+// @Param uuid path string true "job uuid" Format(str)
+// @Success 200 {object} controller.Response
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /jobs/:uuid [get]
+func (c *Controller) StopJob(ctx *gin.Context) {
+	uuid := ctx.Param("uuid")
+
+	job := scheduler.GetJobByUUID(uuid)
+	if job == nil {
+		c.createErrorResponse(ctx, http.StatusNotFound, 101, "job id does not exist")
+		return
+	}
+
+	err := job.Stop()
+	if err != nil {
+		c.createErrorResponse(ctx, http.StatusNotFound, 102, "Could not stop job")
+		return
+	}
+
+	ctx.JSON(http.StatusAccepted, Response{Data: "ok"})
 	return
 }

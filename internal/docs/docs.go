@@ -274,12 +274,13 @@ var doc = `{
         "models.Job": {
             "type": "object",
             "properties": {
-                "download": {
+                "download_info": {
                     "type": "object",
                     "$ref": "#/definitions/models.Download"
                 },
                 "uuid": {
-                    "type": "string"
+                    "type": "string",
+                    "format": "uuid"
                 }
             }
         }

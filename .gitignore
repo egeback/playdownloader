@@ -23,6 +23,7 @@ mediadownloader
 internal/__debug_bin
 download_media_api.code-workspace
 media/*.mp4
+media/*.ts
 
 playdownloader.code-workspace
 cmd/mediadownloader/__debug_bin

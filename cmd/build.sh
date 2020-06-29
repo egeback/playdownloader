@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-#version=0.1.3
 version=`cat VERSION`
 time=$(date)
 swag init --output ./internal/docs --parseInternal --generalInfo ./cmd/mediadownloader/main.go

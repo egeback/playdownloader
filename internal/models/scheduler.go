@@ -5,13 +5,13 @@ import (
 	"time"
 )
 
-//DefaultNrWorkers ..
+//DefaultNrWorkers determines how many downloads will run at the same time
 var DefaultNrWorkers = 2
 
-//DefaultCompletedJobRemoval ..
+//DefaultCompletedJobRemoval determines how long a until a job is deleted
 var DefaultCompletedJobRemoval = time.Duration(-15) * time.Minute
 
-//Scheduler ...
+//Scheduler struct to handle scheduler data
 type Scheduler struct {
 	Workers             int
 	jobs                []Job
@@ -19,7 +19,7 @@ type Scheduler struct {
 	ticker              *time.Ticker
 }
 
-//NewScheduler ...
+//NewScheduler creates new Scheduler
 func NewScheduler() *Scheduler {
 	s := &Scheduler{
 		Workers:             DefaultNrWorkers,
@@ -30,12 +30,12 @@ func NewScheduler() *Scheduler {
 	return s
 }
 
-//GetJobs ...
+//GetJobs return all jobs
 func (s *Scheduler) GetJobs() []Job {
 	return s.jobs
 }
 
-//GetJobByUUID ...
+//GetJobByUUID return job by string uuid
 func (s *Scheduler) GetJobByUUID(uuid string) *Job {
 	for _, j := range s.jobs {
 		if j.UUID == uuid {
@@ -50,7 +50,12 @@ func (s *Scheduler) AddJob(job Job) {
 	s.jobs = append(s.jobs, job)
 }
 
-//GetNrRunningJobs ..
+// AllJobs returns job from scheduler
+func (s *Scheduler) AllJobs(uuid string) []Job {
+	return s.jobs
+}
+
+//GetNrRunningJobs returns nummer of running jobs by iterating and checking Running parameter
 func (s *Scheduler) getNrRunningJobs() int {
 	nrRunning := 0
 	for _, j := range s.jobs {
@@ -61,6 +66,7 @@ func (s *Scheduler) getNrRunningJobs() int {
 	return nrRunning
 }
 
+//getStartableJobs returns a list of jobs that can be started based on nr parameter and number of available non started jobs
 func (s *Scheduler) getStartableJobs(nr int) []Job {
 	n := 0
 	jobs := make([]Job, 0, nr)
@@ -76,17 +82,17 @@ func (s *Scheduler) getStartableJobs(nr int) []Job {
 	return jobs
 }
 
-//Stop ...
+//Stop stop scheduler and stopp all running jobs
 func (s *Scheduler) Stop() {
 	s.ticker.Stop()
 	for _, j := range s.jobs {
 		if err := j.Stop(); err != nil {
-			log.Panic(err)
+			log.Println("Error closing job: ", err)
 		}
 	}
 }
 
-//Start ...
+//Start scheduler and ticker
 func (s *Scheduler) Start() {
 	s.ticker = time.NewTicker(500 * time.Second)
 
@@ -104,8 +110,6 @@ func (s *Scheduler) Start() {
 
 			//3. Remove old jobs
 			for i, j := range s.jobs {
-				//then := time.Now().Add(s.completedJobRemoval)
-				//if j.GetCompletedTime().Before(then) {
 				if j.GetCompletedTime() == nil {
 					continue
 				}
