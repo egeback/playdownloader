@@ -14,12 +14,15 @@ import (
 	"github.com/egeback/playdownloader/internal/controllers"
 	_ "github.com/egeback/playdownloader/internal/docs"
 	"github.com/egeback/playdownloader/internal/models"
+	"github.com/egeback/playdownloader/internal/utils"
 	"github.com/egeback/playdownloader/internal/version"
 	"github.com/gin-gonic/gin"
 	jsonp "github.com/tomwei7/gin-jsonp"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
+
+	"github.com/spf13/viper"
 )
 
 var address = ":8081"
@@ -48,13 +51,46 @@ func main() {
 		models.DefaultDownloadDir = defaultDownloadDir
 	}
 
+	viper.SetDefault("users", map[string]string{"user1": "download"})
+	viper.SetDefault("basic_auth", false)
+
+	viper.SetEnvPrefix("DOWNLOADER")
+	viper.BindEnv("users", "USERS")
+	viper.BindEnv("basic_auth", "BASIC_AUTH")
+
+	viper.SetConfigName("config")
+	viper.SetConfigType("yaml")
+	viper.AddConfigPath("./config/")
+	viper.AddConfigPath("../config/")
+	viper.AddConfigPath(".")
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			log.Println("No config file found")
+		} else {
+			log.Panic(fmt.Errorf("Fatal error config file: %s", err))
+		}
+	}
+
+	useBasicAuth := false
+	if os.Getenv("DOWNLOADER_BASIC_AUTH") != "" {
+		useBasicAuth = *utils.GetBoolValueFromString(os.Getenv("DOWNLOADER_BASIC_AUTH"), false)
+	} else {
+		useBasicAuth = viper.GetBool("basic_auth")
+	}
+	users := viper.GetStringMapString("users")
+
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(jsonp.JsonP())
 	c := controllers.NewController()
 	v1 := r.Group("/api/v1")
 	{
-		jobs := v1.Group("/jobs")
+		var jobs *gin.RouterGroup
+		if useBasicAuth {
+			jobs = v1.Group("/jobs", gin.BasicAuth(gin.Accounts(users)))
+		} else {
+			jobs = v1.Group("/jobs")
+		}
 		{
 			jobs.POST("", c.AddJob)
 			jobs.GET("", c.Jobs)

@@ -13,6 +13,7 @@ require (
 	github.com/hashicorp/go-version v1.2.1
 	github.com/liip/sheriff v0.0.0-20190308094614-91aa83a45a3d
 	github.com/mailru/easyjson v0.7.1 // indirect
+	github.com/spf13/viper v1.7.0
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7

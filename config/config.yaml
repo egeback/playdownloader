@@ -1,0 +1,4 @@
+{   
+    "basic_auth": true,
+    "users": { "user1": "downloader" }
+}
