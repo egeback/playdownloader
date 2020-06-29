@@ -1,7 +1,18 @@
 # Play downloader
 
-Microservice to download play serivice media files (series, news, movies etc.). The service wraps arround svtplay-dl, https://svtplay-dl.se/
+Microservice to download play serivice media files (series, news, movies etc.). The service wraps arround [svtplay-dl](https://svtplay-dl.se/) executable.
 
+## Installation
+
+### Clone repo
+
+``` bash
+git clone https://github.com/egeback/playdownloader.git
+```
+
+#### Update configuration
+
+Update ./config/config.yaml
 
 ## Deployment options
 
@@ -9,21 +20,15 @@ The microservice can be deployed as standlone application or in a docker contain
 
 ### Standalone golang application
 
-#### Clone repo
+#### Install Svtplay-dl
 
-``` bash
-git clone https://github.com/egeback/playdownloader.git
-```
-
-Run build script in from root director
+Follow [install page](https://svtplay-dl.se/install/)  
+  
+#### Run build script in from root director
 
 ``` bash
 ./cmd/build.sh
 ```
-
-#### Update configuration
-
-Update ./config/config.yaml
 
 #### Run application
 
@@ -33,29 +38,27 @@ Update ./config/config.yaml
 
 ### Docker container
 
-#### Clone repo
+#### Configure Docker Container
 
-``` bash
-git clone https://github.com/egeback/playdownloader.git
-```
+Update Dockefile (update ports and location of media)
 
-#### Update configuration
-
-1. Update ./config/config.yaml
-2. Update Dockefile (update ports and location of media)
-
-#### Using docker-compose ([link](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwi06f-GpafqAhXLo4sKHVWeA3UQFjAAegQIBBAC&url=https%3A%2F%2Fdocs.docker.com%2Fcompose%2F&usg=AOvVaw02oes91geDSZ-H__u_XMxc))
-
+#### 1. Using docker-compose ([link](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwi06f-GpafqAhXLo4sKHVWeA3UQFjAAegQIBBAC&url=https%3A%2F%2Fdocs.docker.com%2Fcompose%2F&usg=AOvVaw02oes91geDSZ-H__u_XMxc))
 
 ``` bash
 docker-compose up -d --no-deps --build
 ```
 
-This will run swag, build golang code and deploy container
+#### 2. Using docker build
+
+``` bash
+docker build -t egeback_playdownloader .
+```
+
+Both options will run swag, build golang code and deploy container
 
 ## Using API
 
-Swagger documenation available at http://localhost:8082/api/swagger/index.html
+Swagger documenation available at [http://localhost:8082/api/swagger/index.html](http://localhost:8082/api/swagger/index.html)
 
 ## TODO
 

@@ -8,6 +8,9 @@ services:
     image: egeback_playdownloader
     container_name: playdownloader
     environment:
-     - GIN_MODE=release
+      - GIN_MODE=release
     ports:
-     - "8082:8081"
+      - "8082:8081"
+    deploy:
+      restart_policy:
+        condition: unless-stopped

@@ -11,6 +11,8 @@ import (
 	"syscall"
 	"time"
 
+	"gopkg.in/natefinch/lumberjack.v2"
+
 	"github.com/egeback/playdownloader/internal/controllers"
 	_ "github.com/egeback/playdownloader/internal/docs"
 	"github.com/egeback/playdownloader/internal/models"
@@ -39,8 +41,6 @@ var address = ":8081"
 
 // @BasePath /api/v1/
 func main() {
-	fmt.Printf("%s Running Play Media API - Downloader version: %s (%s)\n", time.Now().Format("2006-01-02 15:04:05"), version.BuildVersion, version.BuildTime)
-
 	//Set viper config
 	viper.SetDefault("users", map[string]string{"user1": "download"})
 	viper.SetDefault("basic_auth", false)
@@ -64,7 +64,21 @@ func main() {
 	viper.SetEnvPrefix("DOWNLOADER")
 	viper.BindEnv("users", "USERS")
 	viper.BindEnv("basicAuth", "BASIC_AUTH")
+	viper.BindEnv("logFileLocation", "LOG_FILE_LOCATION")
 	viper.AutomaticEnv()
+
+	logFileLocation := viper.GetString("logFileLocation")
+	if logFileLocation != "" {
+		log.SetOutput(&lumberjack.Logger{
+			Filename:   logFileLocation,
+			MaxSize:    500, // megabytes
+			MaxBackups: 3,
+			MaxAge:     28,   //days
+			Compress:   true, // disabled by default
+		})
+	}
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
+	log.Printf("Running Play Media API - Downloader version: %s (%s)\n", version.BuildVersion, version.BuildTime)
 
 	//Load parameters
 	useBasicAuth := viper.GetBool("basic_auth")
@@ -118,7 +132,7 @@ func main() {
 
 	go func() {
 		// service connections
-		fmt.Printf("Listening and serving HTTP on %s\n", address)
+		log.Printf("Listening and serving HTTP on %s\n", address)
 		if err := srv.ListenAndServe(); err != nil {
 			log.Printf("listen: %s\n", err)
 			if strings.Index(err.Error(), "address already in use") >= 0 {
@@ -141,4 +155,5 @@ func main() {
 	}
 	c.Stop()
 	log.Println("Server exiting")
+	os.Exit(0)
 }
