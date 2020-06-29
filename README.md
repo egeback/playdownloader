@@ -6,7 +6,7 @@ Microservice to download play media
 
 * [ ] Authentication
 * [x] Fix swag in docker
-* [ ] Should svtplay-dl be removed or move to python for wrapper to reduce size 
+* [ ] Should svtplay-dl be removed or move to python for wrapper to reduce size
 * [ ] Test cases
 * [ ] Update README.md with documentation
 * [ ] Update code documentation
